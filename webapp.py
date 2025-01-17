@@ -43,6 +43,8 @@ cloudinary.config(
     api_secret=os.getenv('CLOUDINARY_API_SECRET')
 )
 
+model = YOLO('yolov9c.pt')
+
 @app.route('/upload', methods=['POST'])
 def upload_file():
     if 'file' not in request.files:
@@ -62,6 +64,8 @@ def upload_file():
 def test_function():
     print("you got this ariel!!!!!!!")
     return jsonify({'message': 'Welcome to the API'})
+# Load the model once at the beginning
+model = YOLO('yolov9c.pt')
 
 @app.route('/predict', methods=['POST'])
 def predict_img():
@@ -83,7 +87,8 @@ def predict_img():
 
         if file_extension == 'jpg':
             img = cv2.imread(temp_filepath)
-            model = YOLO('yolov9c.pt')
+            img = cv2.resize(img, (640, 640))  # Resize to reduce memory usage
+
             detections = model(img, save=False)  # Run detection without saving locally
 
             # Convert result image to Cloudinary-compatible format
@@ -117,13 +122,13 @@ def predict_img():
             fourcc = cv2.VideoWriter_fourcc(*'mp4v')
             out = cv2.VideoWriter(output_path, fourcc, 30.0, (frame_width, frame_height))
 
-            model = YOLO('yolov9c.pt')
-
             while cap.isOpened():
                 ret, frame = cap.read()
                 if not ret:
                     break
 
+                # Resize frames before inference
+                frame = cv2.resize(frame, (640, 640))  # Resize to reduce memory usage
                 results = model(frame, save=False)  # Run detection on the frame
                 result_frame = results[0].plot()
                 out.write(result_frame)
