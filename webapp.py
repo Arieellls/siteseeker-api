@@ -43,8 +43,6 @@ cloudinary.config(
     api_secret=os.getenv('CLOUDINARY_API_SECRET')
 )
 
-model = YOLO('yolov9c.pt')
-
 @app.route('/upload', methods=['POST'])
 def upload_file():
     if 'file' not in request.files:
@@ -64,7 +62,7 @@ def upload_file():
 def test_function():
     print("you got this ariel!!!!!!!")
     return jsonify({'message': 'Welcome to the API'})
-# Load the model once at the beginning
+
 model = YOLO('yolov9c.pt')
 
 @app.route('/predict', methods=['POST'])
