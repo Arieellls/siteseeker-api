@@ -70,7 +70,7 @@ sympy==1.13.3
 tensorboard==2.18.0
 tensorboard-data-server==0.7.2
 python==3.10
-tensorflow==2.16.0
+tensorflow==2.10.0
 tensorflow-hub==0.12.0
 tensorflow_intel==2.18.0
 tensorflowjs==3.18.0
